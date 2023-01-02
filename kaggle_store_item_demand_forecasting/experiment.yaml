@@ -3,7 +3,6 @@ gcp:
   location: ... # location e.g "us-central1"
   project_name: "f33-mnaklicka-sandbox"
   service_account: "serv-acc@f33-mnaklicka-sandbox.iam.gserviceaccount.com"
-  credentials_local_path: "/Users/witj/.google/service_accounts/waffleml_dev_key.json"
   storage:
     data_bucket: "f33-mlops/data"
     output_bucket: "f33-mlops"
