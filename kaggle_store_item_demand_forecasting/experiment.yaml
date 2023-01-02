@@ -1,0 +1,110 @@
+---
+gcp:
+  location: ... # location e.g "us-central1"
+  project_name: "f33-mnaklicka-sandbox"
+  service_account: "serv-acc@f33-mnaklicka-sandbox.iam.gserviceaccount.com"
+  credentials_local_path: "/Users/witj/.google/service_accounts/waffleml_dev_key.json"
+  storage:
+    data_bucket: "f33-mlops/data"
+    output_bucket: "f33-mlops"
+    vertex_staging_bucket: "f33-mlops-vertex-pipelines"
+  docker:
+    repository_name: "f33-mlops"
+    repository_path: "us-central1-docker.pkg.dev/f33-mnaklicka-sandbox/f33-mlops"
+
+experiment:
+  name: "kaggle-store-item-demand-forecasting"
+  type: "tabular"
+  task: "regression"
+  input_file: "kaggle_store_item_demand_forecasting.csv"
+  folds: "folds.csv"
+  target_column_name: "sales"
+  hyperparameter_tuning:
+    direction: "minimize"
+    method: "cv"
+    trials_num: 1
+    max_parallel_trials: 1
+    eval_metric: "mae"
+  dataset: "gs://f33-mlops/data/kaggle_store_item_demand_forecasting.csv"
+  random_state: 123
+  cv_params:
+    perf_folds: 3
+    hyper_folds: 10
+
+models:
+  tomorrow_is_today:
+    version: "latest"
+    hyper_parameters:
+      ml:
+        empty:
+          type: int
+          default: 1
+          search_space: [1,2]
+  xgb_baseline:
+    version: "latest"
+    hyper_parameters:
+      ml:
+        n_estimators:
+          type: int
+          default: 10
+          search_space: [10, 300]
+        learning_rate:
+          type: float
+          log_space: true
+          default: 0.1
+          search_space: [1e-3, 0.5]
+        subsample:
+          type: float
+          default: 1.0
+          log_space: false
+          search_space: [0.3, 1.0]
+  xgb_ar:
+    version: "latest"
+    docker_base_image: "python:3.10"
+    resources:
+      train:
+        cpus: 8
+        ram: 128G
+        gpus: 0
+        gpu_type: "NVIDIA_TESLA_K80"
+    hyper_parameters:
+      ml:
+        n_estimators:
+          type: int
+          default: 10
+          search_space: [10, 300]
+        learning_rate:
+          type: float
+          log_space: true
+          default: 0.1
+          search_space: [1e-3, 0.5]
+        subsample:
+          type: float
+          default: 1.0
+          log_space: false
+          search_space: [0.3, 1.0]
+  lgbm_baseline:
+    version: "latest"
+    docker_base_image: "python:3.10"
+    resources:
+      train:
+        cpus: 8
+        ram: 128G
+        gpus: 0
+        gpu_type: "NVIDIA_TESLA_K80"
+    hyper_parameters:
+      ml:
+        n_estimators:
+          type: int
+          default: 10
+          search_space: [10, 300]
+        learning_rate:
+          type: float
+          log_space: true
+          default: 0.1
+          search_space: [1e-3, 0.5]
+        subsample:
+          type: float
+          default: 1.0
+          log_space: false
+          search_space: [0.3, 1.0]
