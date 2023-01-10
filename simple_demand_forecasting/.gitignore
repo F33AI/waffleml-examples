@@ -1,0 +1,9 @@
+venv
+__pycache__
+*.joblib
+wml*.py
+*.log
+*.csv
+Docker
+.waffleml
+.ipynb_checkpoints
