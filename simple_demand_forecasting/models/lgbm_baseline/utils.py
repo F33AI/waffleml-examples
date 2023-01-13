@@ -1,16 +1,12 @@
 import joblib
 import pandas as pd
+from featurization import featurize
 
 
-def read_train_test(path:str) -> pd.DataFrame:
+def read_train_test(path: str) -> pd.DataFrame:
     df = pd.read_csv(path, sep=",")
     df["date"] = pd.to_datetime(df["date"])
     df.sort_values(by=["store", "item", "date"], ascending=True, inplace=True)
-    df["year"] = df.date.dt.year
-    df["month"] = df.date.dt.month
-    df["day"] = df.date.dt.day
-    df["day_of_week"] = df.date.dt.dayofweek
-    df.drop(["date"], axis=1, inplace=True)
     return df
 
 
@@ -27,6 +23,7 @@ def predict_sklearn(test_data_path, model_path, target, features, logger) -> str
 
     logger.info("done. Load & transform data...")
     df = read_train_test(test_data_path)
+    df = featurize(df)
     df.drop([target], axis=1, inplace=True)
 
     logger.info("done. Generate predictions...")

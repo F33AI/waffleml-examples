@@ -9,6 +9,7 @@ from sklearn.pipeline import Pipeline
 
 from utils import export_sklearn, predict_sklearn, read_train_test
 from evaluation import evaluate_preds
+from featurization import featurize
 
 
 def get_model_name():
@@ -51,6 +52,7 @@ def train(training_data_path: str, valid_data_path: str,
 
     logger.info("Load & transform data...")
     X_trn = read_train_test(training_data_path)
+    X_trn = featurize(X_trn)
     y_trn = X_trn[TARGET]
     X_trn.drop([TARGET], axis=1, inplace=True)
     logger.info("done. Training model...")
