@@ -1,0 +1,107 @@
+---
+gcp:
+  location: "us-central1"
+  project_name: "f33-mnaklicka-sandbox"
+  service_account: "serv-acc@f33-mnaklicka-sandbox.iam.gserviceaccount.com"
+  service_account_key: "/Users/witj/projects/gcp_service_accounts/f33-gcp-mlops/serv_acc_key.json"
+  storage:
+    output_bucket: "f33-mlops"
+    vertex_staging_bucket: "f33-mlops-vertex-pipelines"
+  docker:
+    repository_name: "f33-mlops"
+    repository_path: "us-central1-docker.pkg.dev/f33-mnaklicka-sandbox/f33-mlops"
+
+experiment:
+  name: "kaggle-amex-default"
+  type: "tabular"
+  task: "classification"
+  dataset: "gs://f33-mlops/data/kaggle-amex-default.parquet"
+  target_column_name: "target"
+  data_format: "parquet"
+  hyperparameter_tuning:
+    direction: "maximize"
+    method: "cv"
+    max_parallel_trials: 1
+    eval_metric: "auc"
+  random_state: 123
+
+models:
+  xgb_only_numeric_default:
+    source: "xgb_only_numeric"
+    version: "latest"
+    resources:
+      train:
+        cpus: 16
+        memory: 64G
+    hp_iters: 1
+    hyper_parameters:
+      ml:
+        n_estimators:
+          type: int
+          default: 100
+        learning_rate:
+          type: float
+          log_space: true
+          default: 0.3
+        subsample:
+          type: float
+          default: 0.5
+          log_space: false
+        max_bin:
+          type: int
+          default: 15
+          log_space: false
+  xgb_only_numeric_hpopt_bin_15:
+    version: "latest"
+    source: "xgb_only_numeric"
+    resources:
+      train:
+        cpus: 16
+        memory: 64G
+    hp_iterations: 10
+    hyper_parameters:
+      ml:
+        n_estimators:
+          type: int
+          default: 100
+          search_space: [100, 500]
+        learning_rate:
+          type: float
+          log_space: true
+          default: 0.3
+          search_space: [1e-3, 0.9]
+        subsample:
+          type: float
+          default: 0.5
+          log_space: false
+          search_space: [0.5, 1.0]
+        max_bin:
+          type: int
+          default: 15
+  xgb_only_numeric_hpopt_bin_63:
+    version: "latest"
+    source: "xgb_only_numeric"
+    resources:
+      train:
+        cpus: 16
+        memory: 64G
+    hp_iterations: 10
+    hyper_parameters:
+      ml:
+        n_estimators:
+          type: int
+          default: 100
+          search_space: [100, 500]
+        learning_rate:
+          type: float
+          log_space: true
+          default: 0.3
+          search_space: [1e-3, 0.9]
+        subsample:
+          type: float
+          default: 0.5
+          log_space: false
+          search_space: [0.5, 1.0]
+        max_bin:
+          type: int
+          default: 63

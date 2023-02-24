@@ -1,0 +1,42 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.194.0/containers/python-3
+{
+	"name": "Waffleml Debug",
+	"image": "us-central1-docker.pkg.dev/f33-mnaklicka-sandbox/f33-mlops/xgb_only_numeric:latest",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"python.languageServer": "Pylance",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"kahole.magit",
+		"bodil.file-browser",
+		"donjayamanne.githistory",
+		"eamodio.gitlens",
+		"atishay-jain.all-autocomplete",
+		"ionutvmi.path-autocomplete",
+		"christian-kohler.path-intellisense"
+	],
+
+	"mounts": [
+  		"source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached",
+		"source=${localEnv:HOME}/.google/service_accounts,target=/workspaces/.gcp,type=bind,consistency=cached"
+	],
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [5000],
+
+	// "workspaceFolder": "/home/projects"
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postAttachCommand": "apt-get -y update && apt-get -y install git && bash ./.devcontainer/init_waffleml.sh && python -m pip install ipykernel pylint"
+
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	//"remoteUser": "user"
+}
