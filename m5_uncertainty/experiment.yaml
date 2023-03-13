@@ -1,15 +1,15 @@
 ---
 gcp:
   location: "us-central1"
-  project_name: "f33-mnaklicka-sandbox"
-  service_account: "serv-acc@f33-mnaklicka-sandbox.iam.gserviceaccount.com"
-  service_account_key: "/Users/maria/Desktop/Projects/serv_acc_key.json"
+  project_name: ""
+  service_account: ""
+  service_account_key: ""
   storage:
     output_bucket: "f33-mlops"
     vertex_staging_bucket: "f33-mlops-vertex-pipelines"
   docker:
     repository_name: "f33-mlops"
-    repository_path: "us-central1-docker.pkg.dev/f33-mnaklicka-sandbox/f33-mlops"
+    repository_path: ""
 
 experiment:
   name: "m5-uncertainty"
