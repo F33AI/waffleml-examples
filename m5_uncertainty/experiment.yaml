@@ -1,15 +1,15 @@
 ---
 gcp:
   location: "us-central1"
-  project_name: ""
-  service_account: ""
-  service_account_key: ""
+  project_name: "f33-mnaklicka-sandbox"
+  service_account: "serv-acc@f33-mnaklicka-sandbox.iam.gserviceaccount.com"
+  service_account_key: "/Users/maria/Desktop/Projects/serv_acc_key.json"
   storage:
     output_bucket: "f33-mlops"
     vertex_staging_bucket: "f33-mlops-vertex-pipelines"
   docker:
     repository_name: "f33-mlops"
-    repository_path: ""
+    repository_path: "us-central1-docker.pkg.dev/f33-mnaklicka-sandbox/f33-mlops"
 
 experiment:
   name: "m5-uncertainty"
@@ -22,12 +22,12 @@ experiment:
     direction: "minimize"
     method: "cv"
     max_parallel_trials: 2
-    eval_metric: "cvg"
+    eval_metric: "mse"
   random_state: 123
 
 models:
-  lgbm:
-    source: lgbm
+  quantile_lgbm:
+    source: quantile_lgbm
     version: "latest"
     hp_iterations: 1
     docker_base_image: "python:3.10"
